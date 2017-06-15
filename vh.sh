@@ -21,7 +21,7 @@ fi
 printf "\n${BLUE}>> Creando carpetas para [$1] ${NC}\n"
 mkdir -p /var/www/$1/public_html
 printf "\n${BLUE}>> Estableciendo permisos para usuario [$2] en sitio [$1] ${NC}\n"
-chown -R $2:$2 /var/www/$1/public_html
+chown -R $2:$2 /var/www/$1/
 chmod -R 755 /var/www
 
 printf "\n${BLUE}>> Creando archivos de configuracion para sitio [$1] ${NC}\n"
