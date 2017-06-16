@@ -38,7 +38,7 @@ echo "<VirtualHost *:80>
 printf "\n${BLUE}>> Habilitando sitio [$1] ${NC}\n\n"
 a2ensite $1.conf
 printf "\n${BLUE}>> Reiniciando apache2 ${NC}\n"
-service apache2 restart
+/etc/init.d/apache2 restart
 printf "\n${BLUE}>> Añadiendo sitio [$1] a host[local]${NC}\n"
 echo "127.0.0.1  $1" >> /etc/hosts
 printf "\n${BLUE}>> VIRTUALHOST PARA SITIO [http://$1] HABILITADO${NC}\n"
