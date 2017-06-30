@@ -19,26 +19,27 @@ if ! [ $(id -u) = 0 ]; then
 fi
 
 printf "\n${BLUE}>> Creando carpetas para [$1] ${NC}\n"
-mkdir -p /var/www/$1/public_html
+mkdir -p /srv/http/$1/public
 printf "\n${BLUE}>> Estableciendo permisos para usuario [$2] en sitio [$1] ${NC}\n"
-chown -R $2:$2 /var/www/$1/
-chmod -R 755 /var/www
+chown -R $2:$2 /srv/http/$1/
+chmod -R 755 /srv/http
 
 printf "\n${BLUE}>> Creando archivos de configuracion para sitio [$1] ${NC}\n"
-touch /etc/apache2/sites-available/$1.conf
-echo "<VirtualHost *:80>
+
+echo "#[VH] $1
+<VirtualHost *:80>
 		ServerAdmin admin@$1
 		ServerName $1
 		ServerAlias www.$1
-		DocumentRoot /var/www/$1/public_html
-		ErrorLog ${APACHE_LOG_DIR}/error.log
-		CustomLog ${APACHE_LOG_DIR}/access.log combined
-	</VirtualHost>" > /etc/apache2/sites-available/$1.conf
+		DocumentRoot /srv/http/$1/public
+		ErrorLog ${APACHE_LOG_DIR}/$1-error.log
+		CustomLog ${APACHE_LOG_DIR}/$1-access.log combined
+	</VirtualHost>" >> /etc/httpd/conf/extra/httpd-vhosts.conf
 
 printf "\n${BLUE}>> Habilitando sitio [$1] ${NC}\n\n"
-a2ensite $1.conf
+apachectl configtest
 printf "\n${BLUE}>> Reiniciando apache2 ${NC}\n"
-/etc/init.d/apache2 restart
+systemctl restart httpd
 printf "\n${BLUE}>> Añadiendo sitio [$1] a host[local]${NC}\n"
 echo "127.0.0.1  $1" >> /etc/hosts
 printf "\n${BLUE}>> VIRTUALHOST PARA SITIO [http://$1] HABILITADO${NC}\n"
